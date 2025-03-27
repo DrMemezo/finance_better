@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+    <div style="background-color: #ea443ba1;" 
+    class="d-flex justify-content-center align-items-center rounded text-center flex-column mt-1">
+        <p class="h4">Welcome, {{user.username}} </p>
+        <p class="text-center h5"> Cash = {{user.cash | usd }} </p>
+    </div>
+
+    {% if stocks %}
+        <table class="table table-hover">
+            <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Shares</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total Value Of Shares</th>
+            </tr>
+        {% for stock in stocks %}
+            <tr>
+                <td scope="row">{{ stock["symbol"] }}</td>
+                <td>{{ stock["shares"] }}</td>
+                <td>{{ stock["price"] | usd}}</td>
+                <td>{{ stock["total"] | usd}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <p class="font-weight-light text-muted mt-2">No stocks owned.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+
+    {% if quote %}
+
+        <h1>
+            {{ quote["name"] }} [{{ quote["symbol"] }}] has a value of {{ quote["price"] | usd }} per share
+        </h1>
+
+    {% else %}
+    <div id="info-div"></div>
+
+        <form action="/quote" method="post">
+            <div class="mb-3 form-group">
+                <label for="quote">Input quote to look up</label>
+                <input autocomplete="off" id="quote" autofocus class="form-control mx-auto w-auto" name="symbol" required placeholder="Quote" type="text">
+            </div>
+            <button class="btn btn-primary" type="submit" id="lookup">Look up quote!</button>
+        </form>
+    {% endif %}
+        <script>
+            // function getInfo(event) {
+
+            //     event.preventDefault()
+            //     const symbol = document.getElementById("quote").value
+            //     const xhttp = new XMLHttpRequest()
+            //     xhttp.onload = () => {
+            //         if (xhttp.status == 200){
+            //             const response = JSON.parse(xhttp.responseText)
+            //             document.getElementById("info-div").innerHTML = `${response.name} (${response.symbol}) has a price of $${response.price} per share.`;
+            //         }
+
+            //         else if (xhttp.status == 204){
+            //             document.getElementById("info-div").innerHTML = "Invalid Ticker"
+            //         }
+
+            //     }
+
+            //     const url = `/stock-data?symbol=${encodeURIComponent(symbol)}`
+            //     xhttp.open("GET", url)
+            //     xhttp.send()
+            // }
+        </script>
+{% endblock %}

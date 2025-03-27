@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Shares
+{% endblock %}
+
+{% block main %}
+{% if stocks %}
+{% include 'table.html' %}
+<form id="form" action="/sell" method="post">
+
+    <label for="stock">Select a Stock:</label>
+        <select required name="symbol" id="stock" class="form-select" aria-label="stock-select">
+            <option selected disabled> Select Stock</option>
+            {% for ticker in stocks.keys() %}
+            <option value="{{ ticker }}">{{ ticker }}</option>
+            {% endfor %}
+        </select>
+
+    <label for="shares">Select Shares of the stock:</label>
+    <input required type="number" class="form-control" min=0 name="shares" id="shares">
+    <div id="err-msg" class="alert alert-danger" role="alert" style="display: none;"></div>
+    <button type="submit" class="btn btn-danger mt-3"  id="sell">Sell</button>
+</form>
+{% else %}
+    <p class="text-center"> Buy some stocks first! </p>
+{% endif %}
+
+<script>
+
+    document.getElementById("stock").addEventListener("change", validateTicker)
+    function validateTicker(){
+        var ticker = document.getElementById("stock").value
+        const errMsg = document.getElementById("err-msg")
+        errMsg.style.display = "none"
+
+        if (ticker !== "Select Stock"){
+            getShares(ticker, errMsg)
+        }
+        else{
+            errMsg.textContent = "Select a stock first!"
+            errMsg.style.display = "block"
+        }
+    }
+
+    function getShares(ticker, errMsg){
+
+        const xhttp = new XMLHttpRequest()
+
+        const url = "/user-shares"
+        xhttp.open("POST", url, true)
+        xhttp.setRequestHeader("Content-Type","application/json")
+
+        xhttp.onload= () => {
+            if (xhttp.status === 200) {
+                const response = xhttp.responseText
+                enableShares(response)
+            }
+            else if(xhttp.status === 204) {
+                errMsg.textContent = "Invalid Ticker!"
+                errMsg.style.display = "block"
+            }
+            else {
+                console.log(xhttp.status)
+                errMsg.textContent = "Something went wrong!"
+                errMsg.style.display = "block"
+            }
+        }
+
+        xhttp.send(JSON.stringify({"symbol":ticker}))
+
+    }
+
+    function enableShares(shares){
+        const sharesInp = document.getElementById("shares")
+        const submitBtn = document.getElementById("sell")
+        sharesInp.style.display = "unset"
+        sharesInp.value = 0
+        sharesInp.max = shares
+    }
+</script>
+{% endblock %}

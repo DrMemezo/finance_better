@@ -1,0 +1,37 @@
+<!-- Shows every conversation the user has,
+as well as a form to create a new convo -->
+
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Conversations
+{% endblock %}
+
+{% block main %}
+
+<form action="/conversation" method="post">
+    <div class="mb-3">
+        <label for="username_input" class="form-label">Who do you want to talk to?</label>
+        <input type="text" required class="form-control" name="username" id="username_input">
+    </div>
+    <button class="btn btn-primary" type="submit">Convo!</button>
+</form>
+
+    {% if conversations %}
+        <div class="container m-2">
+            <div class="row">
+        {% for convo in conversations %}
+            {% set recipient_user = convo.user1 if convo.user1.id != session["user_id"] else convo.user2 %}
+            <div class="card p-1 mt-2 col-4 col-sm-3 col-md-3">
+                <div class="card-body">
+                    <div class="card-title">
+                        <a href="conversation/{{ recipient_user.id }}" class="text-decoration-none card-link link-secondary text-info">{{ recipient_user.username }} </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

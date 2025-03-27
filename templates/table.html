@@ -1,0 +1,16 @@
+<!-- table.html -->
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Ticker</th>
+        <th scope="col">Shares</th>
+    </tr>
+    </thead>
+    {% for ticker, shares in stocks.items() %}
+    <tr>
+        <th scope="row">{{ ticker }} </th>
+        <td>{{ shares }} </td>
+
+    </tr>
+    {% endfor %}
+</table>

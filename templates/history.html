@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    {% if history %}
+        <table class="table">
+            <thead>
+            <tr> <th></th><th>Symbol</th> <th>Price</th> <th>Shares</th> <th>Time</th> </tr>
+            </thead>
+            <tbody>
+        {% for transaction in history %}
+        <tr>
+            <td> <b>{{'Bought' if transaction.bought else 'Sold'}} </b> </td> <td> {{ transaction.stock_ticker }} </td> <td>{{transaction.price_at_purchase | usd}} </td><td> {{transaction.shares}} </td> <td>{{transaction.time_at_purchase | format_dt }} </td>
+        </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="bg-info">You have not made any purchases!</div>
+    {% endif %}
+
+{% endblock %}
